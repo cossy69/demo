@@ -23,7 +23,7 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' =>'required|string|max:255',
+            'name' =>'required|string|max:255|unique:categories,name,' . $this->route('id'),
             'status' =>'required|boolean',
         ];
     }
@@ -33,6 +33,7 @@ class CategoryRequest extends FormRequest
             'name.required' => 'Tên danh mục không được để trống',
             'name.string' => 'Tên danh mục phải là chuỗi',
             'name.max' => 'Tên danh mục không được vượt quá 255 ký tự',
+            'name.unique' => 'Tên danh mục đã tồn tại',
             'status.required' => 'Trạng thái không được để trống',
             'status.boolean' => 'Trạng thái phải là giá trị boolean (0 hoặc 1)',
         ];
