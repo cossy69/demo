@@ -9,19 +9,22 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     function index(Request $request)
-    {
-        $query = DB::table('products')->orderBy('id', 'desc');
-        $products = $query->paginate(5);
-        $search = $request->input('search');
-        $query = DB::table('products')->orderBy('id', 'desc');
+{
+    $search = $request->input('search');
+    
+    $query = DB::table('products')
+        ->join('categories', 'products.category_id', '=', 'categories.id')
+        ->select('products.*', 'categories.name as category_name') // Lấy tên category
+        ->orderBy('products.id', 'desc');
 
-        if ($search) {
-            $query->where('name', 'like', '%' . $search . '%');
-        }
-
-        $products = $query->paginate(5)->appends(['search' => $search]);
-        return view('products.index', compact('products'));
+    if ($search) {
+        $query->where('products.name', 'like', '%' . $search . '%');
     }
+
+    $products = $query->paginate(5)->appends(['search' => $search]);
+    
+    return view('products.index', compact('products'));
+}
     function create()
     {
         $categories = DB::table('categories')->where('status', 1)->get();
@@ -72,7 +75,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Cập nhật sản phẩm thành công.');
     }
 
-    function destroy(Request $request, $id)
+    function destroy($id)
     {
         DB::table('products')->where('id', $id)->delete();
         return redirect()->route('products.index')->with('success', 'Xóa sản phẩm thành công.');

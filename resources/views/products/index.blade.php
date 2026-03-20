@@ -18,6 +18,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Danh mục</th>
                 <th>Hình ảnh</th>
                 <th>Tên</th>
                 <th>Giá</th>
@@ -30,12 +31,14 @@
             @foreach($products as $product)
             <tr>
                 <td>{{ $product->id }}</td>
+                <td>{{ $product->category_name }}</td>
                 <td>
                     @php
-                        $imageSrc = $product->image ? (str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . ltrim($product->image, '/'))) : '';
+                    $imageSrc = $product->image ? (str_starts_with($product->image, 'http') ? $product->image :
+                    asset('storage/' . ltrim($product->image, '/'))) : '';
                     @endphp
                     @if($imageSrc)
-                        <img src="{{ $imageSrc }}" alt="" width="50">
+                    <img src="{{ $imageSrc }}" alt="" width="50">
                     @endif
                 </td>
                 <td>{{ $product->name }}</td>

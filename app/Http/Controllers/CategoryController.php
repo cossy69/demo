@@ -53,9 +53,17 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index')->with('success', 'Cập nhật danh mục thành công.');
     }
-    public function destroy(Request $request, $id)
-    {
-        DB::table('categories')->where('id', $id)->delete();
-        return redirect()->route('categories.index')->with('success', 'Xóa danh mục thành công.');
+    public function destroy($id)
+{
+    // Kiểm tra xem có sản phẩm hoặc bài viết nào thuộc danh mục này không
+    $hasProducts = DB::table('products')->where('category_id', $id)->exists();
+    $hasPosts = DB::table('posts')->where('category_id', $id)->exists();
+
+    if ($hasProducts || $hasPosts) {
+        return redirect()->back()->with('error', 'Không thể xóa! Danh mục này vẫn còn sản phẩm hoặc bài viết.');
     }
+
+    DB::table('categories')->where('id', $id)->delete();
+    return redirect()->route('categories.index')->with('success', 'Xóa danh mục thành công.');
+}
 }
