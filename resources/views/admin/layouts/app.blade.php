@@ -14,8 +14,15 @@
         <div class="d-flex justify-content-between mb-3">
             <a href="{{route('categories.index')}}" class="btn btn-info">Quản lý danh mục</a>
             <a href="{{route('products.index')}}" class="btn btn-info">Quản lý sản phẩm</a>
-            <a href="{{route('posts.index')}}" class="btn btn-info">Quản lý bài viết</a>
         </div>
+        @if (Auth::check())
+        <div class='col text-end'>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-danger">Đăng xuất</button>
+            </form>
+        </div>
+        @endif
         @yield('content')
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"

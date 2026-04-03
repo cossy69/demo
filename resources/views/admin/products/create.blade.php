@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="container">
-    <div class="fs-2 mb-3">Thêm bài viết mới</div>
+    <div class="fs-2 mb-3">Thêm sản phẩm mới</div>
 
     @if($errors->any())
     <div class="alert alert-danger">
@@ -14,26 +14,31 @@
     </div>
     @endif
 
-    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
-            <label class="form-label">Tiêu đề</label>
-            <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
+            <label class="form-label">Tên sản phẩm</label>
+            <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Nội dung</label>
-            <textarea name="content" class="form-control" rows="5" required>{{ old('content') }}</textarea>
+            <label class="form-label">Giá</label>
+            <input type="number" name="price" class="form-control" value="{{ old('price') }}" required>
         </div>
         <div class="mb-3">
-            <label class="form-label">Tải lên ảnh</label>
-            <input type="file" name="image" class="form-control">
+            <label class="form-label">Số lượng</label>
+            <input type="number" name="quantity" class="form-control" value="{{ old('quantity') }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">File hình ảnh</label>
+            <input type="file" name="image" class="form-control" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Danh mục</label>
             <select name="category_id" class="form-select" required>
                 <option value="">Chọn danh mục</option>
                 @foreach($categories as $category)
-                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                <option value="{{ $category->id }}"
+                    {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
                     {{ $category->name }}
                 </option>
                 @endforeach
@@ -47,7 +52,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Lưu</button>
-        <a href="{{ route('posts.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="{{ route('products.index') }}" class="btn btn-secondary">Quay lại</a>
     </form>
 </div>
 @endsection
